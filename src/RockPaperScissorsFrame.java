@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Rock Paper Scissors game with a GUI
@@ -65,13 +66,12 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
     int maxIndex = 0;
     String[] countNames = {};
     int[] counts = {};
-    String mostUsed = "";
-    String leastUsed = "";
-    String lastUsed = "";
+    String mostUsedPlay = "";
+    String leastUsedPlay = "";
+    String lastUsedPlay = "";
 
     public RockPaperScissorsFrame()
     {
-        // Use a reasonable visually pleasing arrangement of your components using BorderLayout.
         mainPnl = new JPanel();
         mainPnl.setLayout(new BorderLayout());
 
@@ -95,7 +95,7 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         topPnl.setOpaque(true);
         topPnl.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-//A title for your game’s frame “Rock Paper Scissors Game” or some such.
+        //A title for your game’s frame “Rock Paper Scissors Game” or some such.
         titleLbl = new JLabel("Rock Paper Scissors Game", JLabel.CENTER);
         titleLbl.setFont(new Font("Verdana", Font.BOLD, 30));
         titleLbl.setForeground(Color.WHITE);
@@ -104,9 +104,9 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
 
         topPnl.add(titleLbl);
 
-// A stats panel with 3 JLabels and JTextFields (Player Wins, Computer Wins, Ties)
-// each should have the count of the wins etc.
-// JTextFields should be read only (not editable).
+        // A stats panel with 3 JLabels and JTextFields (Player Wins, Computer Wins, Ties)
+        // each should have the count of the wins etc.
+        // JTextFields should be read only (not editable).
         statsPnl = new JPanel();
         statsPnl.setLayout(new GridLayout(2, 4));
         statsPnl.setBackground(Color.BLACK);
@@ -168,13 +168,13 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         topPnl.add(statsPnl);
     }
 
-// A panel with a JTextArea with JScrollPane that displays the results of each game one per line as a text string:
-//    Rock breaks scissors (Player wins)
-//    or
-//    Paper covers Rock (Computer Wins)
-// This should accumulate (append) and display the results for each game in the session,
-// one per line, not just show the results for the last game played.
-// (In other words, you can scroll through all of the game results for the session.)
+    // A panel with a JTextArea with JScrollPane that displays the results of each game one per line as a text string:
+    //    Rock breaks scissors (Player wins)
+    //    or
+    //    Paper covers Rock (Computer Wins)
+    // This should accumulate (append) and display the results for each game in the session,
+    // one per line, not just show the results for the last game played.
+    // (In other words, you can scroll through all of the game results for the session.)
     private void createMiddlePanel()
     {
         middlePnl = new JPanel();
@@ -182,7 +182,7 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         middlePnl.setOpaque(true);
 
         middleTA = new JTextArea(12, 32);
-        middleTA.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        middleTA.setFont(new Font("Tahoma", Font.PLAIN, 14));
         middleTA.setEditable(false);
         middleTA.setMargin(new Insets(10, 10, 10, 10));
         middleTA.setText("Results:\n");
@@ -193,9 +193,9 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         middlePnl.add(scroller);
     }
 
-// A JPanel with three JButton components for Rock, Paper, Scissors, and an additional for Quitting the game.
-// (Each should have an appropriate ImageIcon. Add your images to the IntelliJ project in the src directory.)
-// Put a border around this panel.
+    // A JPanel with three JButton components for Rock, Paper, Scissors, and an additional for Quitting the game.
+    // (Each should have an appropriate ImageIcon. Add your images to the IntelliJ project in the src directory.)
+    // Put a border around this panel.
     private void createBottomPanel()
     {
         bottomPnl = new JPanel();
@@ -243,33 +243,24 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         bottomPnl.add(quitBtn);
     }
 
-// Create a single ActionListener for the R P and S buttons.
-// This should use the ActionEvent ae parameter
-// to determine which of the 3 buttons were clicked.
-// This represents the player move.
-// 1. The player will click on one of the buttons to play the game.
+    // Create a single ActionListener for the R P and S buttons.
+    // This should use the ActionEvent ae parameter
+    // to determine which of the 3 buttons were clicked.
+    // This represents the player move.
+    // 1. The player will click on one of the buttons to play the game.
     @Override
-    public void actionPerformed(ActionEvent ae)
-    {
-        if (ae.getSource() == rockBtn)
-        {
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == rockBtn) {
             playerMove = "R";
-        }
-        else if (ae.getSource() == paperBtn)
-        {
+        } else if (ae.getSource() == paperBtn) {
             playerMove = "P";
-        }
-        else if (ae.getSource() == scissorsBtn)
-        {
+        } else if (ae.getSource() == scissorsBtn) {
             playerMove = "S";
-        }
-        else if (ae.getSource() == quitBtn)
-        {
+        } else if (ae.getSource() == quitBtn) {
             System.exit(0);
         }
 
-        //update playerMoves arraylist and calc least, most, and last used
-        playerMoves.add(playerMove);
+        //calc least, most, and last used
 
         for (String item : playerMoves) {
             if (item.equals("R")) {
@@ -286,8 +277,7 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         int minCount = counts[0];
         int maxCount = counts[0];
 
-         for (int i = 1; i < counts.length; i++)
-         {
+        for (int i = 1; i < counts.length; i++) {
             if (counts[i] > counts[maxIndex]) {
                 maxIndex = i;
             }
@@ -297,10 +287,16 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
             }
         }
 
-        mostUsed = countNames[maxIndex];
-        leastUsed = countNames[minIndex];
-        lastUsed = playerMoves.get(playerMoves.size() - 1);
+        mostUsedPlay = countNames[maxIndex];
+        leastUsedPlay = countNames[minIndex];
 
+        if (!playerMoves.isEmpty())
+        {
+            int lastIndex = playerMoves.size() - 1;
+            lastUsedPlay = playerMoves.get(lastIndex);
+        } else {
+            lastUsedPlay = playerMove;
+        }
         // The computer will determine which Strategy to use to determine the symbol it will use
         // and then determine the results.
         //
@@ -318,9 +314,8 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         //31 -  50 Most Used
         //51 -  70 Last Used
         //71 -  100 Random
-        int randomNum = (int)(Math.random() * 100)+1;
-        if (randomNum <= 10)
-        {
+        int randomNum = (int) (Math.random() * 100) + 1;
+        if (randomNum <= 10) {
             strategyUsed = "Cheat";
 
             // 3. Create the Strategy Interface.
@@ -330,194 +325,188 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
             // Then pass the players move to the corresponding Strategy implementation
             // to get the computers move.
             Cheat cheatStrat = new Cheat(playerMove);
-        }
-        else if (randomNum <= 30)
-        {
+            computerMove = cheatStrat.getMove(playerMove);
+        } else if (randomNum <= 30) {
             strategyUsed = "Least Used";
-            LeastUsed leastUsedStrat = new LeastUsed(playerMove);
-        }
-        else if (randomNum <= 50)
-        {
+            LeastUsed leastUsedStrat = new LeastUsed(leastUsedPlay);
+            computerMove = leastUsedStrat.getMove(leastUsedPlay);
+        } else if (randomNum <= 50) {
             strategyUsed = "Most Used";
-            MostUsed mostUsedStrat = new MostUsed(playerMove);
-        }
-        else if (randomNum <= 70)
-        {
+            MostUsed mostUsedStrat = new MostUsed(mostUsedPlay);
+            computerMove = mostUsedStrat.getMove(mostUsedPlay);
+        } else if (randomNum <= 70) {
             strategyUsed = "Last Used";
-            LastUsed lastUsedStrat = new LastUsed(playerMove);
-        }
-        else
-        {
+            LastUsed lastUsedStrat = new LastUsed(lastUsedPlay);
+            computerMove = lastUsedStrat.getMove(lastUsedPlay);
+        } else {
             strategyUsed = "Random";
             Random randomStrat = new Random(playerMove);
+            computerMove = randomStrat.getMove(playerMove);
         }
-    }
 
-// The JTextArea will be updated with the results display string.
-// One line for each game.
-// Add the strategy used each time to the display in the JTextArea e.g. :
-// “Rock breaks scissors. (Player wins! Computer: Least Used)”
-//
-// The stats panel keeping track of the computer and player wins
-// and the ties should also be updated
-// and should show a running total for all the games played during the session.
-// You should append information to the display string to indicate which strategy was used
-// for the computer move. (See below.)
-//
-
-// Strategies:
-//    a. Least Used:
-//    Keep track of the number of times
-//    that player uses each of the 3 symbols.
-//    Develop an algorithm scheme for the computer
-//    to pick the symbol that will win against
-//    the symbol used the least by the player.
-//    (The assumption here is that the player
-//    will be most likely to use that symbol that they have not used recently.)
-//    You have to implement this as an Inner class
-//    since it has to have access to the player symbol counts.
-    class LeastUsed implements Strategy
-    {
-        public LeastUsed(String playerMove) {}
-
-        @Override
-        public String getMove(String playerMove)
-        {
-            String computerMove = "";
-            switch (leastUsed)
-            {
-                case "R":
-                    computerMove = "S";
-                    break;
-                case "P":
-                    computerMove = "R";
-                    break;
-                case "S":
-                    computerMove = "P";
-                    break;
-            }
-            return computerMove;
-        }
-    }
-
-//    b. Most Used:
-//    As in the previous approach keep track of the player choices
-//    but this time assume that the player will tend to pick
-//    the symbol that they use the most so
-//    the computer will pick the symbol that will beat it.
-//    You have to implement this as an Inner class
-//    since it has to have access to the player symbol counts.
-    class MostUsed implements Strategy
-    {
-        public MostUsed(String playerMove) {}
-
-        @Override
-        public String getMove(String playerMove)
-        {
-            String computerMove = "";
-            switch (mostUsed)
-            {
-                case "R":
-                    computerMove = "S";
-                    break;
-                case "P":
-                    computerMove = "R";
-                    break;
-                case "S":
-                    computerMove = "P";
-                    break;
-            }
-            return computerMove;
-        }
-    }
-
-//    c. Last Used:
-//    Use the symbol that the player used on the last round.
-//    (Be careful not to call this on the first round of play.)
-//    This approach is actually the solution to a famous problem
-//    in computer science known as the prisoner’s dilemma.
-//    You have to implement this as an Inner class
-//    since it has to have access to the player symbol counts.
-    class LastUsed implements Strategy
-    {
-        public LastUsed(String playerMove) {}
-
-        @Override
-        public String getMove(String playerMove)
-        {
-            String computerMove = "";
-            switch (mostUsed)
-            {
-                case "R":
-                    computerMove = "S";
-                    break;
-                case "P":
-                    computerMove = "R";
-                    break;
-                case "S":
-                    computerMove = "P";
-                    break;
-            }
-            return computerMove;
-        }
-    }
-}
-// 5. Note sample program files are attached for the Interface
-// and a test program that use this Cheat Strategy.
-// Please note that Cheat and Random can be easily done as external classes.
-// Do Use an external class for Cheat and Random.
-//
-//    e. Cheat:
-//    no more than 10% of the time,
-//    have the computer cheat and pick the winning symbol
-//    based on the choice the player already made.
-//    Make this an external class.
-class Cheat implements Strategy
-{
-    public Cheat(String playerMove) {}
-
-    public String getMove(String playerMove)
-    {
-        String computerMove = "";
-        switch (playerMove)
-        {
+        // 5. Determine the results of the game.
+        // The JTextArea will be updated with the results display string.
+        // One line for each game.
+        switch (playerMove) {
             case "R":
-                computerMove = "P";
+                switch (computerMove) {
+                    case "R":
+                        middleTA.append("Rock vs Rock. It’s a TIE! ");
+                        ties++;
+                        break;
+                    case "P":
+                        middleTA.append("Paper covers Rock. Computer WINS! ");
+                        losses++;
+                        break;
+                    default:
+                        middleTA.append("Rock breaks Scissors. Player WINS! ");
+                        wins++;
+                }
                 break;
             case "P":
-                computerMove = "S";
+                switch (computerMove) {
+                    case "R":
+                        middleTA.append("Paper covers Rock. Player WINS! ");
+                        wins++;
+                        break;
+                    case "P":
+                        middleTA.append("Paper vs. Paper. It's a TIE! ");
+                        ties++;
+                        break;
+                    default:
+                        middleTA.append("Scissors cut Paper. Computer WINS! ");
+                        losses++;
+                }
                 break;
-            case "S":
-                computerMove = "R";
+            default:
+                switch (computerMove) {
+                    case "R":
+                        middleTA.append("Rock breaks Scissors. Computer WINS! ");
+                        losses++;
+                        break;
+                    case "P":
+                        middleTA.append("Scissors cut Paper. Player WINS! ");
+                        wins++;
+                        break;
+                    default:
+                        middleTA.append("Scissors vs. Scissors. It's a TIE! ");
+                        ties++;
+                }
                 break;
         }
-        return computerMove;
+
+        // You should append information to the display string to indicate which strategy was used
+        // for the computer move. (See below.)// Add the strategy used each time to the display in the JTextArea e.g. :
+        // “Rock breaks scissors. (Player wins! Computer: Least Used)”
+        middleTA.append("Computer: " + strategyUsed + "\n");
+        strategyUsed = "";
+        games++;
+        playerMoves.add(playerMove);
+
+        // The stats panel keeping track of the computer and player wins
+        // and the ties should also be updated
+        // and should show a running total for all the games played during the session.
+
+        winsFld.setText(wins + "");
+        lossesFld.setText(losses + "");
+        tiesFld.setText(ties + "");
+        gamesFld.setText(games + "");
     }
-}
-
-//    d. Random:
-//    Randomize the computer’s choice as in the normal game.
-//    Make this an external class.
-class Random implements Strategy
-{
-    public Random(String playerMove) {}
-
-    public String getMove(String playerMove)
+    // Strategies:
+    //    a. Least Used:
+    //    Keep track of the number of times
+    //    that player uses each of the 3 symbols.
+    //    Develop an algorithm scheme for the computer
+    //    to pick the symbol that will win against
+    //    the symbol used the least by the player.
+    //    (The assumption here is that the player
+    //    will be most likely to use that symbol that they have not used recently.)
+    //    You have to implement this as an Inner class
+    //    since it has to have access to the player symbol counts.
+    class LeastUsed implements Strategy
     {
-        String computerMove = "";
-        int randomNum = (int)(Math.random() * 3);
-        if (randomNum == 0)
+        public LeastUsed(String leastUsedPlay) {}
+
+        @Override
+        public String getMove(String leastUsedPlay)
         {
-            computerMove = "R";
+            String computerMove = "";
+            switch (leastUsedPlay)
+            {
+                case "R":
+                    computerMove = "P";
+                    break;
+                case "P":
+                    computerMove = "S";
+                    break;
+                case "S":
+                    computerMove = "R";
+                    break;
+            }
+            return computerMove;
         }
-        else if (randomNum == 1)
+    }
+
+    //    b. Most Used:
+    //    As in the previous approach keep track of the player choices
+    //    but this time assume that the player will tend to pick
+    //    the symbol that they use the most so
+    //    the computer will pick the symbol that will beat it.
+    //    You have to implement this as an Inner class
+    //    since it has to have access to the player symbol counts.
+    class MostUsed implements Strategy
+    {
+        public MostUsed(String mostUsedPlay) {}
+
+        @Override
+        public String getMove(String mostUsedPlay)
         {
-            computerMove = "P";
+            String computerMove = "";
+            switch (mostUsedPlay)
+            {
+                case "R":
+                    computerMove = "P";
+                    break;
+                case "P":
+                    computerMove = "S";
+                    break;
+                case "S":
+                    computerMove = "R";
+                    break;
+            }
+            return computerMove;
         }
-        else
+    }
+
+    //    c. Last Used:
+    //    Use the symbol that the player used on the last round.
+    //    (Be careful not to call this on the first round of play.)
+    //    This approach is actually the solution to a famous problem
+    //    in computer science known as the prisoner’s dilemma.
+    //    You have to implement this as an Inner class
+    //    since it has to have access to the player symbol counts.
+    class LastUsed implements Strategy
+    {
+        public LastUsed(String lastUsedPlay) {}
+
+        @Override
+        public String getMove(String lastUsedPlay)
         {
-            computerMove = "S";
+            String computerMove = "";
+
+            switch (lastUsedPlay)
+            {
+                case "R":
+                    computerMove = "P";
+                    break;
+                case "P":
+                    computerMove = "S";
+                    break;
+                case "S":
+                    computerMove = "R";
+                    break;
+            }
+            return computerMove;
         }
-        return computerMove;
     }
 }
