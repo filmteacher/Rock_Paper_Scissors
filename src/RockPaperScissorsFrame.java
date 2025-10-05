@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Rock Paper Scissors game with a GUI
@@ -175,11 +174,11 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
     // This should accumulate (append) and display the results for each game in the session,
     // one per line, not just show the results for the last game played.
     // (In other words, you can scroll through all of the game results for the session.)
-    private void createMiddlePanel()
-    {
-        middlePnl = new JPanel();
-        middlePnl.setBackground(Color.BLACK);
-        middlePnl.setOpaque(true);
+        private void createMiddlePanel()
+        {
+            middlePnl = new JPanel();
+            middlePnl.setBackground(Color.BLACK);
+            middlePnl.setOpaque(true);
 
         middleTA = new JTextArea(12, 32);
         middleTA.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -262,6 +261,14 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
 
         //calc least, most, and last used
 
+        if (!playerMoves.isEmpty())
+        {
+            int lastIndex = playerMoves.size() - 1;
+            lastUsedPlay = playerMoves.get(lastIndex);
+        } else {
+            lastUsedPlay = playerMove;
+        }
+
         for (String item : playerMoves) {
             if (item.equals("R")) {
                 countR++;
@@ -272,31 +279,24 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
             }
         }
 
-        String[] countNames = {"R", "P", "S"};
-        int[] counts = {countR, countP, countS};
-        int minCount = counts[0];
-        int maxCount = counts[0];
-
-        for (int i = 1; i < counts.length; i++) {
-            if (counts[i] > counts[maxIndex]) {
-                maxIndex = i;
-            }
-
-            if (counts[i] < counts[minIndex]) {
-                minIndex = i;
-            }
-        }
-
-        mostUsedPlay = countNames[maxIndex];
-        leastUsedPlay = countNames[minIndex];
-
-        if (!playerMoves.isEmpty())
-        {
-            int lastIndex = playerMoves.size() - 1;
-            lastUsedPlay = playerMoves.get(lastIndex);
+        int min = Math.min(countR, Math.min(countP, countS));
+        if (countR == min) {
+            leastUsedPlay = "R";
+        } else if (countP == min) {
+            leastUsedPlay = "P";
         } else {
-            lastUsedPlay = playerMove;
+            leastUsedPlay = "S";
         }
+
+        int max = Math.max(countR, Math.max(countP, countS));
+        if (countR == max) {
+            mostUsedPlay = "R";
+        } else if (countP == max) {
+            mostUsedPlay = "P";
+        } else {
+            mostUsedPlay = "S";
+        }
+
         // The computer will determine which Strategy to use to determine the symbol it will use
         // and then determine the results.
         //
