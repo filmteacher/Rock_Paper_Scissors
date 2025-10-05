@@ -8,14 +8,21 @@ import java.util.ArrayList;
  * Rock Paper Scissors game with a GUI
  *
  * @author Matt Bennett
+ *
+ * @version 2.0
+ * Revised to:
+ *  - eliminate counting the moves twice
+ *  - rename panels to more meaningful names
+ *  - implement Prof Wulf's logic for determining least and most used moves.
  */
 
+//revision - renamed JPanels to be more meaningful names.
 public class RockPaperScissorsFrame extends JFrame implements ActionListener {
     JPanel mainPnl;
-    JPanel topPnl;  // Top
+    JPanel titleAndStatsPnl;  // Top
     JPanel statsPnl;
-    JPanel middlePnl; // Center
-    JPanel bottomPnl; // Bottom
+    JPanel resultsPnl; // Center
+    JPanel buttonsPnl; // Bottom
 
     JTextField winsFld;
     JTextField lossesFld;
@@ -75,13 +82,13 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         mainPnl.setLayout(new BorderLayout());
 
         createTopPanel();
-        mainPnl.add(topPnl, BorderLayout.NORTH);
+        mainPnl.add(titleAndStatsPnl, BorderLayout.NORTH);
 
         createMiddlePanel();
-        mainPnl.add(middlePnl, BorderLayout.CENTER);
+        mainPnl.add(resultsPnl, BorderLayout.CENTER);
 
         createBottomPanel();
-        mainPnl.add(bottomPnl, BorderLayout.SOUTH);
+        mainPnl.add(buttonsPnl, BorderLayout.SOUTH);
 
         add(mainPnl);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,10 +96,10 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
 
     private void createTopPanel()
     {
-        topPnl = new JPanel();
-        topPnl.setBackground(Color.BLACK);
-        topPnl.setOpaque(true);
-        topPnl.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        titleAndStatsPnl = new JPanel();
+        titleAndStatsPnl.setBackground(Color.BLACK);
+        titleAndStatsPnl.setOpaque(true);
+        titleAndStatsPnl.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         //A title for your game’s frame “Rock Paper Scissors Game” or some such.
         titleLbl = new JLabel("Rock Paper Scissors Game", JLabel.CENTER);
@@ -101,7 +108,7 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         titleLbl.setVerticalTextPosition(JLabel.TOP);
         titleLbl.setHorizontalTextPosition(JLabel.CENTER);
 
-        topPnl.add(titleLbl);
+        titleAndStatsPnl.add(titleLbl);
 
         // A stats panel with 3 JLabels and JTextFields (Player Wins, Computer Wins, Ties)
         // each should have the count of the wins etc.
@@ -164,7 +171,7 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         gamesFld.setHorizontalAlignment(JTextField.CENTER);
         statsPnl.add(gamesFld);
 
-        topPnl.add(statsPnl);
+        titleAndStatsPnl.add(statsPnl);
     }
 
     // A panel with a JTextArea with JScrollPane that displays the results of each game one per line as a text string:
@@ -174,11 +181,11 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
     // This should accumulate (append) and display the results for each game in the session,
     // one per line, not just show the results for the last game played.
     // (In other words, you can scroll through all of the game results for the session.)
-        private void createMiddlePanel()
-        {
-            middlePnl = new JPanel();
-            middlePnl.setBackground(Color.BLACK);
-            middlePnl.setOpaque(true);
+    private void createMiddlePanel()
+    {
+        resultsPnl = new JPanel();
+        resultsPnl.setBackground(Color.BLACK);
+        resultsPnl.setOpaque(true);
 
         middleTA = new JTextArea(12, 32);
         middleTA.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -189,7 +196,7 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         scroller = new JScrollPane(middleTA);
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        middlePnl.add(scroller);
+        resultsPnl.add(scroller);
     }
 
     // A JPanel with three JButton components for Rock, Paper, Scissors, and an additional for Quitting the game.
@@ -197,11 +204,11 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
     // Put a border around this panel.
     private void createBottomPanel()
     {
-        bottomPnl = new JPanel();
-        bottomPnl.setBackground(Color.BLACK);
-        bottomPnl.setOpaque(true);
-        bottomPnl.setLayout(new GridLayout(1, 4));
-        bottomPnl.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        buttonsPnl = new JPanel();
+        buttonsPnl.setBackground(Color.BLACK);
+        buttonsPnl.setOpaque(true);
+        buttonsPnl.setLayout(new GridLayout(1, 4));
+        buttonsPnl.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         rockBtn = new JButton("Rock!", rockIcon);
         rockBtn.setPreferredSize(new Dimension(80, 110));
@@ -236,10 +243,10 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         scissorsBtn.addActionListener(this);
         quitBtn.addActionListener(this);
 
-        bottomPnl.add(rockBtn);
-        bottomPnl.add(paperBtn);
-        bottomPnl.add(scissorsBtn);
-        bottomPnl.add(quitBtn);
+        buttonsPnl.add(rockBtn);
+        buttonsPnl.add(paperBtn);
+        buttonsPnl.add(scissorsBtn);
+        buttonsPnl.add(quitBtn);
     }
 
     // Create a single ActionListener for the R P and S buttons.
@@ -260,7 +267,7 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
         }
 
         //calc least, most, and last used
-
+        //revision - moved the playerMoves emplty list check to the beginning of this section
         if (!playerMoves.isEmpty())
         {
             int lastIndex = playerMoves.size() - 1;
@@ -269,6 +276,7 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
             lastUsedPlay = playerMove;
         }
 
+        //revision - eliminated double counting of moves
         for (String item : playerMoves) {
             if (item.equals("R")) {
                 countR++;
@@ -279,6 +287,7 @@ public class RockPaperScissorsFrame extends JFrame implements ActionListener {
             }
         }
 
+        //revision - implemented Prof Wulf's least and most used logic
         int min = Math.min(countR, Math.min(countP, countS));
         if (countR == min) {
             leastUsedPlay = "R";
